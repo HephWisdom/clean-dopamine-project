@@ -1,7 +1,7 @@
 import requests
 import random
 
-API_KEY = 'AIzaSyCfkyIgJdH3AsG2UB7xLJoHJfO5XH4yCUM'
+API_KEY = 'YOUR YOUTUBE DATA API KEY HERE'
 
 #Search for funny vids and skits
 SEARCH_QUERY = [
