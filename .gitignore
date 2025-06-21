@@ -27,6 +27,7 @@ secrets.yaml
 
 # === Render YAML secrets (if separated) ===
 render_secrets.yaml
+txt.txt
 
 # === Cache & Output ===
 *.db
