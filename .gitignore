@@ -1,0 +1,54 @@
+# === Python & Flask ===
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+*.env
+*.env.*
+
+# === System Files ===
+.DS_Store
+Thumbs.db
+
+# === Logs & Reports ===
+*.log
+
+# === Secrets & Keys ===
+*.pem
+*.key
+*.crt
+*.secret.yaml
+secrets.yaml
+.env
+
+# === Render YAML secrets (if separated) ===
+render_secrets.yaml
+
+# === Cache & Output ===
+*.db
+*.sqlite3
+*.csv
+*.json
+
+# Keep your funny video list if needed
+!funny_videos.json  # <-- remove the ! if you want to ignore it
+
+# === VS Code ===
+.vscode/
+
+# === Git ===
+*.swp
+*.swo
+
+# === Node Stuff (in case) ===
+node_modules/
+
+# === Jupyter (if ever used) ===
+.ipynb_checkpoints/
+
+# === JetBrains (PyCharm, etc) ===
+.idea/
