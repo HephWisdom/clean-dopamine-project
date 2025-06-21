@@ -4,13 +4,15 @@ from flask import Flask, request
 from twilio.twiml.messaging_response import MessagingResponse
 import csv
 import datetime
+import os
 
 # Initialize Flask app
 app = Flask(__name__)
 
 
+
 # YouTube API key (replace with your own key) YOUTUBE API KEY
-API_KEY = ''
+YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY")#'AIzaSyCfkyIgJdH3AsG2UB7xLJoHJfO5XH4yCUM'
 
 
 #Search for funny vids and skits
@@ -31,7 +33,7 @@ def youtube_response(search_word):
     search_url = (
         "https://www.googleapis.com/youtube/v3/search"
         f"?part=snippet&maxResults={MAX_RESULTS}&q={search_word}"
-        f"&type=video&key={API_KEY}"
+        f"&type=video&key={YOUTUBE_API_KEY}"
     )
 
     try:
@@ -51,7 +53,7 @@ def youtube_response(search_word):
 
 
 #log user activity to a CSV file
-def log_user_activity(filename,user_number, message,date):
+def log_user_activity(filename,user_number, message):
     #create a new line in the CSV file with user number and message
     #if the file does not exist, create it and write the header
     try:
@@ -63,7 +65,7 @@ def log_user_activity(filename,user_number, message,date):
     #log the user activity
     with open(filename, mode='a', newline='', encoding='utf-8') as file:
         writer = csv.writer(file)
-        writer.writerow([row_count, user_number, message, datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")])
+        writer.writerow([row_count, user_number, message, datetime.datetime.now()])
         print(f"Logged activity for {user_number}: {message}")
 
 
@@ -72,7 +74,7 @@ def log_user_activity(filename,user_number, message,date):
 
 
 # Transform and print video data
-def Transform_video_data(videos):
+def transform_video_data(videos):
     results = []
     if not videos:
         print("No videos found.")
@@ -104,7 +106,7 @@ def dopamine_reply():
     search_word=random.choice(SEARCH_QUERY)
     videos = youtube_response(search_word)
     print("Searching for funny videos...")
-    video_list = Transform_video_data(videos)
+    video_list = transform_video_data(videos)
     
 
     #building the response
@@ -117,7 +119,7 @@ def dopamine_reply():
     msg = resp.message()
     
     # Log user activity
-    log_user_activity('user_activity_log.csv', user_number, incoming_msg, datetime.datetime.now())
+    log_user_activity('user_activity_log.csv', user_number, incoming_msg)
     
     if "more" in incoming_msg:
         msg.body("Here are some more funny videos for you to enjoy!\n" + "\n".join(video_list))
@@ -145,4 +147,5 @@ def home():
 
     
 if __name__ == "__main__":
-    app.run(port=8080, debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)  # Set debug=True for development
