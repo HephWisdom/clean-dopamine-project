@@ -59,7 +59,7 @@ def supabase_test():
     try:
         res = supabase.table("public.user_logs").insert({
             "number": "+2330000000",
-            "message": "test log from browser",
+            "message": "This is a test message from test route",
             "timestamp": datetime.datetime.now().isoformat()
         }).execute()
         return f"✅ Insert success: {res.data}"
