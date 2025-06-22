@@ -21,7 +21,7 @@ YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY")#'AIzaSyCfkyIgJdH3AsG2UB7xLJo
 SUPABASE_URL = os.environ.get("SUPABASE_URL")#SUPABASE_URL
 SUPABASE_ANON_KEY = os.environ.get("SUPABASE_ANON_KEY")#'supabase-key'
 # Initialize Supabase client
-supabase = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 
 #Search for funny vids and skits
