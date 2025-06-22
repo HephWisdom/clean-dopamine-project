@@ -46,6 +46,10 @@ def log_to_supabase(user_number, message):
             "message": message,
             "timestamp": datetime.datetime.now().isoformat()
         }
+        res = supabase.table("user_logs").insert({
+            "number": "+233555000999",
+            "message": "This is a test message"
+        }).execute()
         response = supabase.table("user_logs").insert(data).execute()
         if response.status_code == 201:
             print(f"user logged for {user_number}: {message}, response: {response.data}")
