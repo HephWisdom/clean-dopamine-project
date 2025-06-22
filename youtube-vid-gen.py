@@ -46,7 +46,7 @@ def log_to_supabase(user_number, message):
             "message": message,
             "timestamp": datetime.datetime.now().isoformat()
         }
-        response = supabase.table("public.user_logs").insert(data).execute()
+        response = supabase.table("user_logs").insert(data).execute()
         print(f"Logged to Supabase ✅: {response.data}")
     except Exception as e:
         print(f"❌ Error logging to Supabase: {e}")
