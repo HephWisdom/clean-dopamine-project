@@ -5,6 +5,9 @@ from twilio.twiml.messaging_response import MessagingResponse
 import csv
 import datetime
 import os
+from supabase import create_client
+
+
 
 # Initialize Flask app
 app = Flask(__name__)
@@ -13,6 +16,12 @@ app = Flask(__name__)
 
 # YouTube API key (replace with your own key) YOUTUBE API KEY
 YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY")#'AIzaSyCfkyIgJdH3AsG2UB7xLJoHJfO5XH4yCUM'
+
+# Supabase URL and Key (replace with your own)
+SUPABASE_URL = os.environ.get("SUPABASE_URL")#SUPABASE_URL
+SUPABASE_ANON_KEY = os.environ.get("SUPABASE_ANON_KEY")#'supabase-key'
+# Initialize Supabase client
+supabase = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
 
 
 #Search for funny vids and skits
@@ -23,6 +32,33 @@ SEARCH_QUERY = [
 ]
 
 MAX_RESULTS = 3
+
+
+
+
+
+# Function to log user activity to Supabase
+def log_to_supabase(user_number, message):
+    # Log user activity to Supabase
+    try:
+        data = {
+            "user_number": user_number,
+            "message": message,
+            "timestamp": datetime.datetime.now().isoformat()
+        }
+        response = supabase.table("user_logs").insert(data).execute()
+        if response.status_code == 201:
+            print(f"user logged for {user_number}: {message}, response: {response.data}")
+        else:
+            print(f"Failed to log user: {response}")
+    except Exception as e:
+        print(f"Error logging to Supabase: {e}")
+
+
+
+
+
+
 
 
 
@@ -52,6 +88,10 @@ def youtube_response(search_word):
 
 
 
+
+
+
+
 #log user activity to a CSV file
 def log_user_activity(filename,user_number, message):
     #create a new line in the CSV file with user number and message
@@ -67,6 +107,10 @@ def log_user_activity(filename,user_number, message):
         writer = csv.writer(file)
         writer.writerow([row_count, user_number, message, datetime.datetime.now()])
         print(f"Logged activity for {user_number}: {message}")
+
+
+
+
 
 
 
@@ -98,6 +142,13 @@ def transform_video_data(videos):
 
 
 
+
+
+
+
+
+
+
 # Flask route to handle incoming messages
 @app.route("/webhook", methods=["POST"])      
 def dopamine_reply():
@@ -114,15 +165,25 @@ def dopamine_reply():
     print(f"Received message from {user_number}")
     incoming_msg = request.form.get('Body', '').strip().lower()
     
+    
     #get user number
     resp = MessagingResponse()
     msg = resp.message()
+    
+    # Log user activity to Supabase
+    log_to_supabase(user_number, incoming_msg)
+    
+    
     
     # Log user activity
     log_user_activity('user_activity_log.csv', user_number, incoming_msg)
     
     if "more" in incoming_msg:
-        msg.body("Here are some more funny videos for you to enjoy!\n" + "\n".join(video_list))
+        if video_list:
+            msg.body("Here are some more funny videos for you to enjoy!\n" + "\n\n".join(video_list))
+        else:
+            msg.body("Sorry, couldn't find any funny videos at the moment. "
+                     "Please try again later or ask for something else.")
     elif "help" in incoming_msg:
         msg.body("Clean Dopamine is all about providing you with "
                  "positive and uplifting content. "
@@ -143,7 +204,7 @@ def dopamine_reply():
 
 @app.route("/")
 def home():
-    return "🚀 Clean Dopamine Launcher is running!"
+    return "Clean Dopamine Launcher is running!"
 
     
 if __name__ == "__main__":

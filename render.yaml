@@ -13,4 +13,8 @@ services:
         value: ${TWILIO_ACCOUNT_SID}
       - key: TWILIO_PHONE_NUMBER
         value: ${TWILIO_PHONE_NUMBER}
+      - key: SUPABASE_URL
+        value: ${SUPABASE_URL}
+      - key: SUPABASE_ANON_KEY
+        value: ${SUPABASE_ANON_KEY}
  
