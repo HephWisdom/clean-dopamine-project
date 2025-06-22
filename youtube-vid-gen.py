@@ -5,7 +5,7 @@ from twilio.twiml.messaging_response import MessagingResponse
 import csv
 import datetime
 import os
-from supabase import create_client
+from supabase import create_client, Client
 
 
 
