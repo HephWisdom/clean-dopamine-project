@@ -57,14 +57,14 @@ def log_to_supabase(user_number, message):
 @app.route("/supabase-test")
 def supabase_test():
     try:
-        res = supabase.table("public.user_logs").insert({
+        res = supabase.table("user_logs").insert({
             "number": "+2330000000",
             "message": "This is a test message from test route",
             "timestamp": datetime.datetime.now().isoformat()
         }).execute()
         return f"✅ Insert success: {res.data}"
     except Exception as e:
-        return f"❌ Error: {e}", 500
+        return f"❌ Error: {e}", 500  # ✅ Add this missing closing parenthesis
 
 
 
