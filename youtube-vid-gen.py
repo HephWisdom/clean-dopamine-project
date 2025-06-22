@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 
 # YouTube API key (replace with your own key) YOUTUBE API KEY
-YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY")#'AIzaSyCfkyIgJdH3AsG2UB7xLJoHJfO5XH4yCUM'
+YOUTUBE_API_KEY = os.environ.get("YOUTUBE_API_KEY")#''
 
 # Supabase URL and Key (replace with your own)
 SUPABASE_URL = os.environ.get("SUPABASE_URL")#SUPABASE_URL
