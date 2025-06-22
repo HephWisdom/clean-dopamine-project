@@ -46,7 +46,7 @@ def log_to_supabase(user_number, message):
             "message": message,
             "timestamp": datetime.datetime.now().isoformat()
         }
-        res = supabase.table("user_logs").insert({
+        res = supabase.table("public.user_logs").insert({
             "number": "+233555000999",
             "message": "This is a test message"
         }).execute()
