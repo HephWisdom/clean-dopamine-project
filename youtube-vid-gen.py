@@ -42,25 +42,29 @@ def log_to_supabase(user_number, message):
     # Log user activity to Supabase
     try:
         data = {
-            "user_number": user_number,
+            "number": user_number,
             "message": message,
             "timestamp": datetime.datetime.now().isoformat()
         }
-        res = supabase.table("public.user_logs").insert({
-            "number": "+233555000999",
-            "message": "This is a test message"
-        }).execute()
-        response = supabase.table("user_logs").insert(data).execute()
-        if response.status_code == 201:
-            print(f"user logged for {user_number}: {message}, response: {response.data}")
-        else:
-            print(f"Failed to log user: {response}")
+        response = supabase.table("public.user_logs").insert(data).execute()
+        print(f"Logged to Supabase ✅: {response.data}")
     except Exception as e:
-        print(f"Error logging to Supabase: {e}")
+        print(f"❌ Error logging to Supabase: {e}")
 
 
 
 
+@app.route("/supabase-test")
+def supabase_test():
+    try:
+        res = supabase.table("public.user_logs").insert({
+            "number": "+2330000000",
+            "message": "test log from browser",
+            "timestamp": datetime.datetime.now().isoformat()
+        }).execute()
+        return f"✅ Insert success: {res.data}"
+    except Exception as e:
+        return f"❌ Error: {e}", 500
 
 
 
